@@ -122,7 +122,7 @@ exports.deleteItem = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    const item = await Item.findOne({ where: { id, userId } });
+    const item = await Item.findOne({ where: { id, lenderId: userId } });
 
     if (!item) {
       return res.status(404).json({
