@@ -2,7 +2,8 @@ const express = require("express");
 const session = require("express-session");
 const routes = require("./routes");
 const db = require("./config/databaseConfig");
-const { SECRET_KEY } = require("./constants/constants");
+const { SECRET_KEY, seedItems } = require("./constants/constants");
+const { Item } = require("./model");
 
 const app = express();
 const port = 3010;
@@ -16,6 +17,15 @@ const startServer = async () => {
     // Sync all models and create tables if they do not exist
     await db.sync({ alter: true });
     console.log("Synced all models with the database.");
+
+    // Seed items only if none exist
+    const itemCount = await Item.count();
+    if (itemCount === 0) {
+      await Item.bulkCreate(seedItems);
+      console.log("Seeded initial items to the database.");
+    } else {
+      console.log("Seed data already exists, skipping seeding process.");
+    }
 
     // Start the server
     app.listen(port, () => {
