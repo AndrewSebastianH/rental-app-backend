@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { Item } = require("../model");
+const { Item, RentalTransaction } = require("../model");
 
 // Create a new item
 exports.createItem = async (req, res) => {
@@ -27,8 +27,23 @@ exports.createItem = async (req, res) => {
 // Get all Items
 exports.getAllItems = async (req, res) => {
   try {
+    const userId = req.user.id;
     const items = await Item.findAll();
-    res.status(200).json(items);
+
+    const itemsWithRentalStatus = await Promise.all(
+      items.map(async (item) => {
+        const existingRental = await RentalTransaction.findOne({
+          where: { itemId: item.id, renterId: userId, status: "active" },
+        });
+
+        return {
+          ...item.toJSON(),
+          isRented: !!existingRental,
+        };
+      })
+    );
+
+    res.status(200).json(itemsWithRentalStatus);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -54,6 +69,7 @@ exports.getAllItemsByLender = async (req, res) => {
 exports.getItemById = async (req, res) => {
   try {
     const itemId = req.params.id;
+    const userId = req.user.id;
 
     const item = await Item.findOne({
       where: {
@@ -67,6 +83,16 @@ exports.getItemById = async (req, res) => {
       });
     }
 
+    // Check if the user has already rented this item
+    const rentalRecord = await RentalTransaction.findOne({
+      where: {
+        itemId: itemId,
+        userId: userId,
+      },
+    });
+
+    const isRented = rentalRecord ? true : false;
+
     // Return Item details
     return res.status(200).json({
       id: item.id,
@@ -75,6 +101,7 @@ exports.getItemById = async (req, res) => {
       description: item.description,
       price: item.price,
       rentRequirement: item.rentRequirement,
+      isRented: isRented,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
     });
