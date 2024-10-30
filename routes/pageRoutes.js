@@ -9,10 +9,7 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 router.post(
   "/signup",
   [
-    body("username")
-      .trim()
-      .isAlphanumeric()
-      .withMessage("Username must be alphanumeric"),
+    body("username").trim().isEmail().withMessage("Username must be an email"),
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
