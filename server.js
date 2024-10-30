@@ -3,7 +3,7 @@ const session = require("express-session");
 const routes = require("./routes");
 const db = require("./config/databaseConfig");
 const { SECRET_KEY, seedItems } = require("./constants/constants");
-const { Item } = require("./model");
+const { Item, User } = require("./model");
 
 const app = express();
 const port = 3010;
@@ -17,6 +17,28 @@ const startServer = async () => {
     // Sync all models and create tables if they do not exist
     await db.sync({ alter: true });
     console.log("Synced all models with the database.");
+
+    // Sync all models and create tables if they do not exist
+    await db.sync({ alter: true });
+    console.log("Synced all models with the database.");
+
+    // Seed Admin User only if none exist
+    const userCount = await User.count();
+    if (userCount === 0) {
+      const adminEmail = process.env.ADMIN_USER;
+      const adminPassword = process.env.ADMIN_PASSWORD;
+
+      if (!adminEmail || !adminPassword) {
+        console.error("ADMIN_USER or ADMIN_PASSWORD is not set in .env");
+        return;
+      }
+
+      await User.create({
+        username: adminEmail,
+        password: adminPassword,
+      });
+      console.log("Admin user seeded to the database.");
+    }
 
     // Seed items only if none exist
     const itemCount = await Item.count();

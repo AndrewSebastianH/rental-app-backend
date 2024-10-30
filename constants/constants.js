@@ -10,7 +10,7 @@ const seedItems = [
     price: "9000000.00",
     minimumRent: 5,
     status: "available",
-    lenderId: 0, // lenderId 0 means yang ngelent itemnya APPnya sendiri
+    lenderId: 1, // lenderId 0 means yang ngelent itemnya APPnya sendiri
   },
   {
     name: "Buku Fornoh",
@@ -20,7 +20,7 @@ const seedItems = [
     price: "900.00",
     minimumRent: null,
     status: "available",
-    lenderId: 0,
+    lenderId: 1,
   },
   {
     name: "Tips n Trik Jadi Jamet Ganteng",
@@ -29,7 +29,7 @@ const seedItems = [
     price: "666666.00",
     minimumRent: 365,
     status: "available",
-    lenderId: 0,
+    lenderId: 1,
   },
   {
     name: "Baca Buku Ini Untuk GANTENG SEKEJAP",
@@ -38,7 +38,7 @@ const seedItems = [
     price: "999999.00",
     minimumRent: 1,
     status: "available",
-    lenderId: 0,
+    lenderId: 1,
   },
   {
     name: "Panduan Menyanyi Merdu",
@@ -47,7 +47,7 @@ const seedItems = [
     price: "50000.00",
     minimumRent: 7,
     status: "available",
-    lenderId: 0,
+    lenderId: 1,
   },
   {
     name: "Ensiklopedia Serangga",
@@ -56,7 +56,7 @@ const seedItems = [
     price: "15000.00",
     minimumRent: 3,
     status: "available",
-    lenderId: 0,
+    lenderId: 1,
   },
   {
     name: "Ilmu Kebal 101",
@@ -65,7 +65,7 @@ const seedItems = [
     price: "100000.00",
     minimumRent: 30,
     status: "available",
-    lenderId: 0,
+    lenderId: 1,
   },
   {
     name: "Dunia Rahasia Perkodingan",
