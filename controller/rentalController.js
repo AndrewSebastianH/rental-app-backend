@@ -154,7 +154,13 @@ exports.getTransactionStatus = async (req, res) => {
     if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
     }
-    res.status(200).json({ orderId, status: transaction.transactionStatus });
+    res
+      .status(200)
+      .json({
+        message: "Success retrieving transaction status",
+        orderId,
+        status: transaction.transactionStatus,
+      });
   } catch (error) {
     console.error("Error fetching transaction status:", error);
     res.status(500).json({ error: error.message });
