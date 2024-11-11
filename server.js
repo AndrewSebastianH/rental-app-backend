@@ -18,10 +18,6 @@ const startServer = async () => {
     await db.sync({ alter: true });
     console.log("Synced all models with the database.");
 
-    // Sync all models and create tables if they do not exist
-    await db.sync({ alter: true });
-    console.log("Synced all models with the database.");
-
     // Seed Admin User only if none exist
     const userCount = await User.count();
     if (userCount === 0) {
