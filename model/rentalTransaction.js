@@ -35,7 +35,15 @@ const RentalTransaction = sequelize.define(
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: "active",
+      defaultValue: "pending",
+    },
+    orderId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    transactionStatus: {
+      type: DataTypes.STRING,
+      defaultValue: "pending",
     },
   },
   {
@@ -44,6 +52,7 @@ const RentalTransaction = sequelize.define(
   }
 );
 
+// Associations
 User.hasMany(RentalTransaction, { foreignKey: "renterId" });
 RentalTransaction.belongsTo(User, { foreignKey: "renterId" });
 Item.hasMany(RentalTransaction, { foreignKey: "itemId" });
