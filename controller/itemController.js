@@ -87,7 +87,8 @@ exports.getItemById = async (req, res) => {
     const rentalRecord = await RentalTransaction.findOne({
       where: {
         itemId: itemId,
-        userId: userId,
+        renterId: userId,
+        status: "active",
       },
     });
 
