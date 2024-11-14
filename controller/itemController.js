@@ -33,7 +33,7 @@ exports.getAllItems = async (req, res) => {
     const itemsWithRentalStatus = await Promise.all(
       items.map(async (item) => {
         const existingRental = await RentalTransaction.findOne({
-          where: { itemId: item.id, renterId: userId, status: "active" },
+          where: { itemId: item.id, renterId: userId, rentalStatus: "active" },
         });
 
         return {
@@ -72,7 +72,7 @@ exports.getRentedItems = async (req, res) => {
     const rentalTransactions = await RentalTransaction.findAll({
       where: {
         renterId: userId,
-        status: "active",
+        rentalStatus: "active",
       },
     });
 
@@ -120,7 +120,7 @@ exports.getItemById = async (req, res) => {
       where: {
         itemId: itemId,
         renterId: userId,
-        status: "active",
+        rentalStatus: "active",
       },
     });
 

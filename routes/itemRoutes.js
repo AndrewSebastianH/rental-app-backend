@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 
 const itemController = require("../controller/itemController");
 const isAuthenticated = require("../middleware/isAuthenticated");
@@ -27,19 +27,23 @@ router.post(
   itemController.createItem
 );
 
-// Get all rented items by current user
+// Get all rented items by the current user
 router.get("/rented", isAuthenticated, itemController.getRentedItems);
+
+// Get all listed items by lenderId
+router.get(
+  "/lender/:lenderId",
+  isAuthenticated,
+  itemController.getAllItemsByLender
+);
 
 // Get all items
 router.get("/", isAuthenticated, itemController.getAllItems);
 
-// Get item by id
+// Get item by ID
 router.get("/:id", isAuthenticated, itemController.getItemById);
 
-// Get all listed items by lenderId
-router.get("/:lenderId", isAuthenticated, itemController.getAllItemsByLender);
-
-// Update a item by ID
+// Update an item by ID
 router.put(
   "/:id",
   isAuthenticated,
@@ -60,7 +64,7 @@ router.put(
   itemController.updateItem
 );
 
-// Delete a item by ID
+// Delete an item by ID
 router.delete("/:id", isAuthenticated, itemController.deleteItem);
 
 module.exports = router;
