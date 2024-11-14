@@ -33,7 +33,7 @@ const RentalTransaction = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    status: {
+    rentalStatus: {
       type: DataTypes.STRING,
       defaultValue: "pending",
     },
