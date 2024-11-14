@@ -25,7 +25,7 @@ exports.rentItem = async (req, res) => {
 
     // Check if the user is already renting the item
     const existingTransaction = await RentalTransaction.findOne({
-      where: { itemId, renterId: userId, status: "active" },
+      where: { itemId, renterId: userId, rentalStatus: "active" },
     });
 
     if (existingTransaction) {
@@ -124,18 +124,18 @@ exports.paymentWebhook = async (req, res) => {
     }
 
     // Update the transaction status and rental status based on Midtrans response
-    if (status === "settlement") {
+    if (rentalStatus === "settlement") {
       // Payment success
       await rentalTransaction.update({
-        status: "active",
+        rentalStatus: "active",
         transactionStatus: "settlement",
       });
-    } else if (status === "pending") {
+    } else if (rentalStatus === "pending") {
       await rentalTransaction.update({ transactionStatus: "pending" });
-    } else if (status === "cancel") {
+    } else if (rentalStatus === "cancel") {
       await rentalTransaction.update({
         transactionStatus: "canceled",
-        status: "canceled",
+        rentalStatus: "canceled",
       });
     }
 
@@ -158,7 +158,7 @@ exports.getTransactionStatus = async (req, res) => {
     res.status(200).json({
       message: "Success retrieving transaction status",
       orderId,
-      status: transaction.transactionStatus,
+      rentalStatus: transaction.transactionStatus,
     });
   } catch (error) {
     console.error("Error fetching transaction status:", error);
