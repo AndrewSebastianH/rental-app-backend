@@ -124,15 +124,15 @@ exports.paymentWebhook = async (req, res) => {
     }
 
     // Update the transaction status and rental status based on Midtrans response
-    if (rentalStatus === "settlement") {
+    if (status === "settlement") {
       // Payment success
       await rentalTransaction.update({
         rentalStatus: "active",
         transactionStatus: "settlement",
       });
-    } else if (rentalStatus === "pending") {
+    } else if (status === "pending") {
       await rentalTransaction.update({ transactionStatus: "pending" });
-    } else if (rentalStatus === "cancel") {
+    } else if (status === "cancel") {
       await rentalTransaction.update({
         transactionStatus: "canceled",
         rentalStatus: "canceled",
