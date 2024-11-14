@@ -158,7 +158,7 @@ exports.getTransactionStatus = async (req, res) => {
     res.status(200).json({
       message: "Success retrieving transaction status",
       orderId,
-      rentalStatus: transaction.transactionStatus,
+      status: transaction.transactionStatus,
     });
   } catch (error) {
     console.error("Error fetching transaction status:", error);
