@@ -165,3 +165,20 @@ exports.getTransactionStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getUserTransactionHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const transactions = await RentalTransaction.findAll({
+      where: { renterId: userId },
+    });
+
+    res.status(200).json({
+      message: "Success fetching transactions",
+      transactions,
+    });
+  } catch (error) {
+    console.error("Error fetching transactions: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};

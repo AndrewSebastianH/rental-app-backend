@@ -6,6 +6,13 @@ const itemController = require("../controller/itemController");
 const rentalController = require("../controller/rentalController");
 const isAuthenticated = require("../middleware/isAuthenticated");
 
+// Get all user transactions history
+router.get(
+  "/history",
+  isAuthenticated,
+  rentalController.getUserTransactionHistory
+);
+
 // Create a new item
 router.post("/item/:id", isAuthenticated, rentalController.rentItem);
 
