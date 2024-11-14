@@ -65,6 +65,38 @@ exports.getAllItemsByLender = async (req, res) => {
   }
 };
 
+// Get all rented items by current user
+exports.getRentedItems = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const rentalTransactions = await RentalTransaction.findAll({
+      where: {
+        renterId: userId,
+        status: "active",
+      },
+    });
+
+    const rentedItems = await Promise.all(
+      rentalTransactions.map(async (transaction) => {
+        const item = await Item.findOne({
+          where: {
+            id: transaction.itemId,
+          },
+        });
+
+        return {
+          ...item.toJSON(),
+          rentedAt: transaction.createdAt,
+        };
+      })
+    );
+
+    res.status(200).json(rentedItems);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Get specific listing
 exports.getItemById = async (req, res) => {
   try {

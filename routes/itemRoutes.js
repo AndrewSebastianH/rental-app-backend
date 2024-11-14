@@ -27,6 +27,9 @@ router.post(
   itemController.createItem
 );
 
+// Get all rented items by current user
+router.get("/rented", isAuthenticated, itemController.getRentedItems);
+
 // Get all items
 router.get("/", isAuthenticated, itemController.getAllItems);
 
