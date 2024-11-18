@@ -1,8 +1,45 @@
 // rentController.js
 const { validationResult } = require("express-validator");
+const cron = require("node-cron");
+const { Op } = require("sequelize");
 const { RentalTransaction, Item } = require("../model");
 const axios = require("axios");
 const crypto = require("crypto");
+
+cron.schedule("0 * * * *", async () => {
+  console.log(
+    "++++++++++++++ Running hourly cron job to expire rentals ++++++++++++++++"
+  );
+
+  try {
+    const now = new Date();
+
+    const [updatedCount] = await RentalTransaction.update(
+      { rentalStatus: "expired" },
+      {
+        where: {
+          [Op.or]: [
+            {
+              endDate: {
+                [Op.lte]: now,
+              },
+              rentalStatus: "active",
+            },
+            {
+              transactionStatus: "expire",
+            },
+          ],
+        },
+      }
+    );
+
+    if (updatedCount > 0) {
+      console.log(`Expired ${updatedCount} rental transactions.`);
+    }
+  } catch (error) {
+    console.error("Error running hourly cron job to expire rentals:", error);
+  }
+});
 
 exports.rentItem = async (req, res) => {
   const errors = validationResult(req);
@@ -63,12 +100,21 @@ exports.rentItem = async (req, res) => {
       }
     );
 
+    function roundToNearestHour(date) {
+      const newDate = new Date(date);
+      newDate.setMinutes(0, 0, 0);
+      newDate.setHours(newDate.getHours() + 1);
+      return newDate;
+    }
+
     // Create a pending rental transaction
     await RentalTransaction.create({
       itemId,
       renterId: userId,
       startDate: new Date(),
-      endDate: new Date(Date.now() + rentLength * 24 * 3600 * 1000),
+      endDate: roundToNearestHour(
+        new Date(Date.now() + rentLength * 24 * 3600 * 1000)
+      ),
       orderId,
     });
 
@@ -125,17 +171,25 @@ exports.paymentWebhook = async (req, res) => {
 
     // Update the transaction status and rental status based on Midtrans response
     if (status === "settlement") {
-      // Payment success
       await rentalTransaction.update({
         rentalStatus: "active",
         transactionStatus: "settlement",
       });
-    } else if (status === "pending") {
+    } else if (
+      status === "pending" ||
+      status === "capture" ||
+      status === "deny"
+    ) {
       await rentalTransaction.update({ transactionStatus: "pending" });
+    } else if (status === "expire") {
+      await rentalTransaction.update({
+        transactionStatus: "expire",
+        rentalStatus: "expired",
+      });
     } else if (status === "cancel") {
       await rentalTransaction.update({
-        transactionStatus: "canceled",
-        rentalStatus: "canceled",
+        transactionStatus: "cancel",
+        rentalStatus: "cancelled",
       });
     }
 
@@ -169,13 +223,31 @@ exports.getTransactionStatus = async (req, res) => {
 exports.getUserTransactionHistory = async (req, res) => {
   try {
     const userId = req.user.id;
+
     const transactions = await RentalTransaction.findAll({
       where: { renterId: userId },
+      include: [
+        {
+          model: Item,
+          attributes: ["id", "name", "price"],
+        },
+      ],
     });
+
+    const transactionHistory = transactions.map((transaction) => ({
+      transactionId: transaction.id,
+      itemId: transaction.Item.id,
+      itemName: transaction.Item.name,
+      itemPrice: transaction.Item.price,
+      rentalStatus: transaction.rentalStatus,
+      transactionStatus: transaction.transactionStatus,
+      startDate: transaction.startDate,
+      endDate: transaction.endDate,
+    }));
 
     res.status(200).json({
       message: "Success fetching transactions",
-      transactions,
+      transactionHistory,
     });
   } catch (error) {
     console.error("Error fetching transactions: ", error);
