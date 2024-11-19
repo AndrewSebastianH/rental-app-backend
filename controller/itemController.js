@@ -10,13 +10,15 @@ exports.createItem = async (req, res) => {
   }
 
   try {
-    const { name, category, description, price, minimumRent } = req.body;
+    const { name, category, description, price, minimumRent, contentLink } =
+      req.body;
     const item = await Item.create({
       name,
       category,
       description,
       price,
       minimumRent,
+      hashedContent: contentLink,
       lenderId: req.user.id,
     });
     res.status(201).json(item);
