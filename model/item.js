@@ -34,6 +34,10 @@ const Item = sequelize.define(
       type: DataTypes.STRING,
       defaultValue: "available",
     },
+    hashedContent: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     lenderId: {
       type: DataTypes.INTEGER,
       references: {

@@ -67,4 +67,7 @@ router.put(
 // Delete an item by ID
 router.delete("/:id", isAuthenticated, itemController.deleteItem);
 
+// Access special content
+router.get("/:id/access", isAuthenticated, itemController.accessItemContent);
+
 module.exports = router;

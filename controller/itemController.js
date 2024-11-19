@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const { Item, RentalTransaction } = require("../model");
+const { decryptContent } = require("../services/encrypter");
 
 // Create a new item
 exports.createItem = async (req, res) => {
@@ -193,6 +194,41 @@ exports.deleteItem = async (req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error("Error deleting Item:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.accessItemContent = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const itemId = req.params.id;
+
+    const rental = await RentalTransaction.findOne({
+      where: { renterId: userId, itemId: itemId, rentalStatus: "active" },
+    });
+
+    if (!rental) {
+      return res.status(403).json({
+        message: "You have not rented this item or the rental has expired.",
+      });
+    }
+
+    const item = await Item.findOne({ where: { id: itemId } });
+
+    if (!item || !item.hashedContent) {
+      return res
+        .status(404)
+        .json({ message: "No special content available for this item." });
+    }
+
+    const decryptedContent = decryptContent(item.hashedContent);
+
+    res.status(200).json({
+      message: "Access granted.",
+      content: decryptedContent,
+    });
+  } catch (error) {
+    console.error("Error Accessing Item:", error);
     return res.status(500).json({ error: error.message });
   }
 };
