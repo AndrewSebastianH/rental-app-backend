@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const { Item, RentalTransaction } = require("../model");
-const { decryptContent } = require("../services/encrypter");
+const { decryptContent, encryptContent } = require("../services/encrypter");
 
 // Create a new item
 exports.createItem = async (req, res) => {
@@ -18,7 +18,7 @@ exports.createItem = async (req, res) => {
       description,
       price,
       minimumRent,
-      hashedContent: contentLink,
+      hashedContent: encryptContent(contentLink),
       lenderId: req.user.id,
     });
     res.status(201).json(item);
