@@ -10,6 +10,8 @@ const seedItems = [
     price: "9000000.00",
     minimumRent: 5,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1, // lenderId 0 means yang ngelent itemnya APPnya sendiri
   },
   {
@@ -20,6 +22,8 @@ const seedItems = [
     price: "900.00",
     minimumRent: null,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
   {
@@ -29,6 +33,8 @@ const seedItems = [
     price: "666666.00",
     minimumRent: 365,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
   {
@@ -38,6 +44,8 @@ const seedItems = [
     price: "999999.00",
     minimumRent: 1,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
   {
@@ -47,6 +55,8 @@ const seedItems = [
     price: "50000.00",
     minimumRent: 7,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
   {
@@ -56,6 +66,8 @@ const seedItems = [
     price: "15000.00",
     minimumRent: 3,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
   {
@@ -65,6 +77,8 @@ const seedItems = [
     price: "100000.00",
     minimumRent: 30,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
   {
@@ -75,6 +89,8 @@ const seedItems = [
     price: "300000.00",
     minimumRent: 15,
     status: "available",
+    hashedContent:
+      "cc5bc89396b1eca108a35c6b09c0fd92fc4793538142639396cadb27180f979cc7dbb36645769508072ee77bf6ab25d889abfa0578d61aa30b4a120aa3637333279d100bc173aadf0f3a5643315564571ccb115b149af845d7a89c306758ff75",
     lenderId: 1,
   },
 ];
